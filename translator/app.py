@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 from langdetect import detect
 from deep_translator import GoogleTranslator
