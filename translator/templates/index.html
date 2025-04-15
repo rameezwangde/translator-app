@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Multilingual Translator</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -43,8 +42,8 @@
 </head>
 
 <body class="text-white">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 p-4 flex-grow">
-    <h1 class="text-3xl sm:text-4xl font-bold text-center mb-8 fade-in">🌍 Multilingual Translator</h1>
+  <div class="container mx-auto p-4 flex-grow">
+    <h1 class="text-4xl font-bold text-center mb-8 fade-in">🌍 Multilingual Translator</h1>
     <div class="max-w-3xl mx-auto glass fade-in">
       <form action="/trans" method="POST">
         <label class="block mb-2 font-semibold">Enter text:</label>
@@ -57,30 +56,37 @@
           {% endfor %}
         </select>
 
-        <button type="submit"
-          class="mt-4 bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded font-semibold w-full sm:w-auto">Translate</button>
+        <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 transition px-4 py-2 rounded font-semibold">Translate</button>
       </form>
 
       {% if translation %}
       <div class="mt-6">
-        <p class="text-lg font-semibold">Detected Language:
-          <span class="text-yellow-200">{{ detected_lang }}</span>
-        </p>
+        <p class="text-lg font-semibold">Detected Language: <span class="text-yellow-200">{{ detected_lang }}</span></p>
         <div class="mt-4 p-4 bg-white text-black rounded">
           <p id="translated-text">{{ translation }}</p>
         </div>
 
-        <div class="flex flex-col sm:flex-row mt-4 gap-4">
-          <button onclick="speakText('{{ translation }}')"
-            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">🔊 Speak</button>
+        <div class="flex mt-4 space-x-4">
+          <button onclick="speakText('{{ translation }}')" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">🔊 Speak</button>
           <button onclick="copyText()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded">📋 Copy</button>
         </div>
+      </div>
+      {% endif %}
+
+      {% if replacements %}
+      <div class="mt-6 bg-yellow-100 text-black p-4 rounded">
+        <h3 class="font-bold mb-2">🧠 Replaced Idioms:</h3>
+        <ul class="list-disc list-inside">
+          {% for idiom, meaning in replacements %}
+          <li><strong>"{{ idiom }}"</strong> → <em>{{ meaning }}</em></li>
+          {% endfor %}
+        </ul>
       </div>
       {% endif %}
     </div>
   </div>
 
-  <footer class="bg-black text-white text-center p-4 mt-8">
+  <footer class="bg-black text-white text-center p-4 mt-10">
     &copy; 2025 Rameez's Multilingual Translator. All rights reserved.
   </footer>
 
@@ -93,13 +99,14 @@
 
     function copyText() {
       const text = document.getElementById("translated-text").innerText;
-      navigator.clipboard.writeText(text).then(() => alert("Text copied to clipboard!"));
+      navigator.clipboard.writeText(text)
+        .then(() => alert("Text copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
     }
   </script>
 </body>
 
 </html>
-
 
 
 
